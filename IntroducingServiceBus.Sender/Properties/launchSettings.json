@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "IntroducingServiceBus.Sender": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

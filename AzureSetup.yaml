@@ -1,0 +1,178 @@
+#---
+#First we create a namespace for everything
+#apiVersion: v1
+#kind: Namespace
+#metadata:
+#  name: hsbiotdemo
+#  labels: 
+#    name: hsbiotdemo
+#spec:
+#  type: Namespace
+---
+#And a secret for iotdata
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: storagesecret
+#type: Opaque
+#data:
+#  azurestorageaccountname: ZGJkaXNr
+#  azurestorageaccountkey: bW5zWjJNN09BTEs3SmRETlVpeUMzV3JxMCtYUndGTEZoOUVNWEJ0Wnp3VDhUMmZFZ202K0tsbG1tMWZFWTIwTlh0RXlCbzN2VkIxZzhUZEVpcUpTWnc9PQ==
+---
+#First of all we install Rabbit MQ
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3-management
+        ports:
+        - containerPort: 5672
+---
+#First we install the API Gateway
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apigateway
+spec:
+  selector:
+    matchLabels:
+      app: apigateway
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: apigateway
+    spec:
+      containers:
+      - name: apigateway
+        image: lennartacr.azurecr.io/apigateway:#{Build.BuildId}#
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+
+---
+#Then we install the IoTFrontend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iotfrontend
+spec:
+  selector:
+    matchLabels:
+      app: iotfrontend
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: iotfrontend
+    spec:
+      containers:
+      - name: iotfrontend
+        image: lennartacr.azurecr.io/iotfrontend:#{Build.BuildId}#
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+
+---
+#Then we install the IoTBackend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iotbackend
+spec:
+  selector:
+    matchLabels:
+      app: iotbackend
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: iotbackend
+    spec:
+      containers:
+      - name: iotbackend
+        image: lennartacr.azurecr.io/iotbackend:#{Build.BuildId}#
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+
+---
+#First of the load balancers we install the one for Rabbit MQ
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  ports:
+  - name: mqport1
+    port: 5672
+  - name: mqport2
+    port: 15672
+  selector:
+    app: rabbitmq
+  type: LoadBalancer
+
+---
+#Finally we install the one for the ApiGateway
+apiVersion: v1
+kind: Service
+metadata:
+  name: apigateway
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    targetPort: 80
+  selector:
+    app: apigateway
+  type: LoadBalancer
+
+---
+#Then we install the one for the IoTFrontend
+apiVersion: v1
+kind: Service
+metadata:
+  name: iotfrontend
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  ports:
+  - name: http-port
+    port: 80
+  selector:
+    app: iotfrontend
+  type: LoadBalancer
+
+---
+#Then we install the one for the IoTBackend
+apiVersion: v1
+kind: Service
+metadata:
+  name: iotbackend
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  ports:
+  - name: http-port
+    port: 80
+  selector:
+    app: iotbackend
+  type: LoadBalancer

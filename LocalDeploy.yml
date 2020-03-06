@@ -1,0 +1,71 @@
+#First we install the API Gateway
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ocelotgateway
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: ocelotgateway
+    spec:
+      containers:
+      - name: ocelotgateway
+        image: ocelotgateway:latest
+        #imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---
+#Then we install the WebApi
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: webapi
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: webapi
+    spec:
+      containers:
+      - name: webapi
+        image: webapi:latest
+        #imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---
+#Then we install the service for the ApiGateway
+apiVersion: v1
+kind: Service
+metadata:
+    name: ocelotgateway
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    targetPort: 80
+  selector:
+    app: ocelotgateway
+  type: LoadBalancer
+---
+#Then we install one for the WebApi
+apiVersion: v1
+kind: Service
+metadata:
+    name: webapi
+    annotations: 
+      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    targetPort: 80
+  selector:
+    app: webapi
+  type: LoadBalancer

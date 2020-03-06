@@ -1,0 +1,23 @@
+{
+  "ReRoutes": [
+    {
+      //"DownstreamPathTemplate": "/weather/{id}",
+      "DownstreamPathTemplate": "/weatherforecast",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi",
+          //"Port": 4001
+          //"Port": 443,
+          "Port": 80
+        }
+      ],
+      //"UpstreamPathTemplate": "/weather/{id}",
+      "UpstreamPathTemplate": "/weather",
+      "UpstreamHttpMethod": [ "Get" ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost"
+  }
+}
