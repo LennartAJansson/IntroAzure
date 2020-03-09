@@ -6,7 +6,7 @@ Examplen återkopplar till viss del till den genomgång av NET Core 3.x som finn
 
 Varje exempel kommer att ha ett motsvarande powershell script för att sätta upp de tjänster som används. Detta är en metod som kallas "Infrastructure as code".  
 
-Till exemplen behövs också i vissa fall tillgång till Azure Devops med dess bygg och release pipeline, jag kommer att gå igenom hur man sätter upp allt detta.
+Till exemplen behövs också i vissa fall tillgång till Azure Devops med dess build och release pipeline, jag kommer att gå igenom hur man sätter upp allt detta.
 
 För att kunna köra alla exempel behövs ett antal komponenter tillgängliga:
 
