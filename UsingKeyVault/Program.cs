@@ -13,7 +13,7 @@ namespace UsingKeyVault
     //https://www.codit.eu/blog/the-danger-of-using-config-addazurekeyvault-in-net-core/?country_sel=be
     //https://stackoverflow.com/questions/55201051/bind-key-vault-settings-to-class
     //https://docs.microsoft.com/en-us/azure/azure-app-configuration/use-key-vault-references-dotnet-core?tabs=cmd%2Ccore2x
-    static class Program
+    internal static class Program
     {
         public static void Main(string[] args) =>
             CreateHostBuilder(args)
@@ -65,6 +65,7 @@ namespace UsingKeyVault
 
                     services.AddHostedService<Worker>();
                 });
+
         private static void TestConfig(IConfigurationRoot config, params string[] values)
         {
             //Just throw if value doesn't exist

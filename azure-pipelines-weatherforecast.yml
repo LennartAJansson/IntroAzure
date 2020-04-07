@@ -1,0 +1,80 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+name: '$(majorMinorVersion).$(semanticVersion)' 
+
+variables:
+  buildConfiguration: 'Release'
+  majorMinorVersion: 0.1.0
+  semanticVersion: $[counter(variables['majorMinorVersion'], 0)]
+  buildVersion: '$(majorMinorVersion).$(semanticVersion)'
+  
+steps:
+#Säkerställ att rätt NET Core SDK finns
+- task: UseDotNet@2
+  displayName: 'Use .Net Core sdk 3.1.x'
+  inputs:
+    version: 3.1.x
+
+#Kompilera hela repot
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) -p:Version=$(buildVersion)'
+
+#Kör eventuella unittester
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*.UnitTests.csproj'
+    arguments: '--configuration $(buildConfiguration) -p:Version=$(buildVersion)'
+    testRunTitle: 'Unittests $(Build.DefinitionName)_$(buildVersion)'
+
+#Bygg Docker images om det finns någon sådan
+- task: DockerInstaller@0
+  inputs:
+    dockerVersion: '19.03.5'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'AutomatiseradBRFDevACR'
+    repository: '$(ACRRepository)'
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
+    buildContext: 
+    tags: |
+      $(Build.BuildId)
+      $(buildVersion)
+    addPipelineData: false
+- task: Docker@2
+  inputs:
+    containerRegistry: 'AutomatiseradBRFDevACR'
+    repository: '$(ACRRepository)'
+    command: 'push'
+    tags: |
+      $(Build.BuildId)
+      $(buildVersion)
+    addPipelineData: false
+
+#Om bygget innehåller Nuget paket så kopiera dessa till ArtifactStagingDirectory
+- task: CopyFiles@2
+  inputs:
+    Contents: '**/bin/$(buildConfiguration)/**/*.nupkg'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+#Om något kopierats till ArtifactStagingDirectory så publicera detta till droplocation
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+#Om detta bygge ska bygga och deploya Docker images med Helm charts så behövs denna:
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: charts'
+  inputs:
+    PathtoPublish: '$(chartsFolder)'
+    ArtifactName: 'charts'

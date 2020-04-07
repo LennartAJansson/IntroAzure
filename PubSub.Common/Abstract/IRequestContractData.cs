@@ -7,6 +7,5 @@ namespace PubSub.Common.Abstract
         Guid CorrelationId { get; set; }
         DateTimeOffset Created { get; set; }
         int Id { get; set; }
-        string ToString();
     }
 }

@@ -92,6 +92,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ToDo", "ToDo", "{F2C26FAD-E
 		SetupSqlServer.ps1 = SetupSqlServer.ps1
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04. Kubernetes", "04. Kubernetes", "{26DA1DAB-6F12-446F-8B79-F3FEBFF91CAE}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines-weatherforecast.yml = azure-pipelines-weatherforecast.yml
+		WeatherForecast.yaml = WeatherForecast.yaml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherForecast", "WeatherForecast\WeatherForecast.csproj", "{9CC54A77-3590-4568-AA0B-501C5BEEB792}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,6 +170,10 @@ Global
 		{3C4ABAF8-17B4-443E-AF19-BB35A817E001}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C4ABAF8-17B4-443E-AF19-BB35A817E001}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C4ABAF8-17B4-443E-AF19-BB35A817E001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CC54A77-3590-4568-AA0B-501C5BEEB792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CC54A77-3590-4568-AA0B-501C5BEEB792}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CC54A77-3590-4568-AA0B-501C5BEEB792}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CC54A77-3590-4568-AA0B-501C5BEEB792}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,6 +197,7 @@ Global
 		{A279B597-4E77-4DFE-A890-7E8FF6574ABE} = {80795066-76D0-44F5-BAB6-B5DBC4D58D4A}
 		{F72D243C-8199-4B47-A4F5-E9A90882D189} = {80795066-76D0-44F5-BAB6-B5DBC4D58D4A}
 		{F2C26FAD-EFBE-4806-9834-3F55DD4F4744} = {E835CD79-749C-4C16-AD69-6E0021059017}
+		{9CC54A77-3590-4568-AA0B-501C5BEEB792} = {26DA1DAB-6F12-446F-8B79-F3FEBFF91CAE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1A6B422-EE61-4822-8C9A-94022D85F09C}

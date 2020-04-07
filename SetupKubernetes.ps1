@@ -9,7 +9,6 @@ $ScriptDirectory = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 ##############################
 $resourceGroup = "LennartAKS"
 $location = "northeurope"
-$keyvaultName = "LennartKV"
 
 $acrName = "LennartACR"
 $aksCluster = "LennartCluster"

@@ -12,7 +12,7 @@ New-Item -ItemType Directory -Force -Path "$ScriptDirectory\Logs"
 ##############################
 $resourceGroup = "LennartSBRG"
 $location = "northeurope"
-$keyvaultName = "LennartKV"
+$keyvaultName = "LennartKV2"
 
 $serviceBusName = "LennartServiceBus"
 $topicName = "nisse"
