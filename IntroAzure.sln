@@ -52,49 +52,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PubSub.Subscriber2", "PubSu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UsingKeyVault", "UsingKeyVault\UsingKeyVault.csproj", "{858C032D-359B-484D-BA78-87487987D1DF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99. Feature toggling", "99. Feature toggling", "{D8B2B3C2-CA4A-4A10-AA78-327EDF3E122A}"
-	ProjectSection(SolutionItems) = preProject
-		FeatureToggling.md = FeatureToggling.md
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggling", "FeatureToggling\FeatureToggling.csproj", "{57602630-76DA-4456-8392-093FF5047380}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "98. Ocelot Gateway", "98. Ocelot Gateway", "{80795066-76D0-44F5-BAB6-B5DBC4D58D4A}"
-	ProjectSection(SolutionItems) = preProject
-		BuildDockerAndDeployLocal.ps1 = BuildDockerAndDeployLocal.ps1
-		CreateLocalDashboard.ps1 = CreateLocalDashboard.ps1
-		LocalDashboard.yml = LocalDashboard.yml
-		LocalDeploy.yml = LocalDeploy.yml
-		OtherDeploys.txt = OtherDeploys.txt
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcelotGateway", "OcelotGateway\OcelotGateway.csproj", "{A279B597-4E77-4DFE-A890-7E8FF6574ABE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{F72D243C-8199-4B47-A4F5-E9A90882D189}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AD65803A-80C1-4981-9320-7CDE756E8B5B}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		.git\config = .git\config
-		SetMultipleRemotes.ps1 = SetMultipleRemotes.ps1
 	EndProjectSection
-EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{3C4ABAF8-17B4-443E-AF19-BB35A817E001}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ToDo", "ToDo", "{F2C26FAD-EFBE-4806-9834-3F55DD4F4744}"
 	ProjectSection(SolutionItems) = preProject
-		AzureStart.md = AzureStart.md
-		Infrastruktur.md = Infrastruktur.md
 		InstallLocal.ps1 = InstallLocal.ps1
-		SetMultipleRemotes.ps1 = SetMultipleRemotes.ps1
-		SetupApplicationInsights.ps1 = SetupApplicationInsights.ps1
-		SetupRedis.ps1 = SetupRedis.ps1
-		SetupSqlServer.ps1 = SetupSqlServer.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04. Kubernetes", "04. Kubernetes", "{26DA1DAB-6F12-446F-8B79-F3FEBFF91CAE}"
 	ProjectSection(SolutionItems) = preProject
 		azure-pipelines-weatherforecast.yml = azure-pipelines-weatherforecast.yml
+		Kubernetes.md = Kubernetes.md
 		WeatherForecast.yaml = WeatherForecast.yaml
 	EndProjectSection
 EndProject
@@ -154,22 +126,6 @@ Global
 		{858C032D-359B-484D-BA78-87487987D1DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{858C032D-359B-484D-BA78-87487987D1DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{858C032D-359B-484D-BA78-87487987D1DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57602630-76DA-4456-8392-093FF5047380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57602630-76DA-4456-8392-093FF5047380}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57602630-76DA-4456-8392-093FF5047380}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57602630-76DA-4456-8392-093FF5047380}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A279B597-4E77-4DFE-A890-7E8FF6574ABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A279B597-4E77-4DFE-A890-7E8FF6574ABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A279B597-4E77-4DFE-A890-7E8FF6574ABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A279B597-4E77-4DFE-A890-7E8FF6574ABE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F72D243C-8199-4B47-A4F5-E9A90882D189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F72D243C-8199-4B47-A4F5-E9A90882D189}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F72D243C-8199-4B47-A4F5-E9A90882D189}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F72D243C-8199-4B47-A4F5-E9A90882D189}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C4ABAF8-17B4-443E-AF19-BB35A817E001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C4ABAF8-17B4-443E-AF19-BB35A817E001}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C4ABAF8-17B4-443E-AF19-BB35A817E001}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C4ABAF8-17B4-443E-AF19-BB35A817E001}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9CC54A77-3590-4568-AA0B-501C5BEEB792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9CC54A77-3590-4568-AA0B-501C5BEEB792}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CC54A77-3590-4568-AA0B-501C5BEEB792}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -193,9 +149,6 @@ Global
 		{BF06097B-3C09-4703-BD8D-210B5973C19F} = {C875EC03-05DB-419A-BE17-76E9A8FEE4AE}
 		{0C2BB0F3-959E-409F-BDD5-0B2EA5952A9D} = {C875EC03-05DB-419A-BE17-76E9A8FEE4AE}
 		{858C032D-359B-484D-BA78-87487987D1DF} = {07D6C129-F5CB-4D55-936E-803A0A5745E8}
-		{57602630-76DA-4456-8392-093FF5047380} = {D8B2B3C2-CA4A-4A10-AA78-327EDF3E122A}
-		{A279B597-4E77-4DFE-A890-7E8FF6574ABE} = {80795066-76D0-44F5-BAB6-B5DBC4D58D4A}
-		{F72D243C-8199-4B47-A4F5-E9A90882D189} = {80795066-76D0-44F5-BAB6-B5DBC4D58D4A}
 		{F2C26FAD-EFBE-4806-9834-3F55DD4F4744} = {E835CD79-749C-4C16-AD69-6E0021059017}
 		{9CC54A77-3590-4568-AA0B-501C5BEEB792} = {26DA1DAB-6F12-446F-8B79-F3FEBFF91CAE}
 	EndGlobalSection

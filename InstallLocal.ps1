@@ -3,6 +3,12 @@
 #
 #############################
 #https://aka.ms/installazurecliwindows
+
+if($env:ChocolateyInstall)
+{
+}
+
+
 if($env:Path -notmatch "chocolatey")
 {
 	iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
@@ -47,6 +53,15 @@ if($env:Path -notmatch "7-zip")
 else
 {
 	choco upgrade 7zip -y
+}
+
+if($env:Path -notmatch "Azure\\CLI2")
+{
+	choco install azure-cli -y
+}
+else
+{
+	choco upgrade azure-cli -y
 }
 
 if($env:Path -notmatch "Azure\\CLI2")
