@@ -37,3 +37,23 @@ stages:
         Dockerfile: '$(dockerfilePath)Dockerfile'
         buildContext: '$(dockerfilePath)/..'
         tags: '$(tag)'
+    - task: replacetokens@3
+      inputs:
+        rootDirectory: '$(Build.SourcesDirectory)'
+        targetFiles: 'WeatherForecast.yaml'
+        encoding: 'auto'
+        writeBOM: false
+        actionOnMissing: 'warn'
+        keepToken: false
+        tokenPrefix: '#{'
+        tokenSuffix: '}#'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)'
+        Contents: 'WeatherForecast.yaml'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Build.ArtfactStagingDirectory)'
+        artifact: 'drop'
+        publishLocation: 'pipeline'
