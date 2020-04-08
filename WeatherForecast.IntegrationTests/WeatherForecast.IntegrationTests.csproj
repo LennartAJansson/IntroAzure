@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntroAzure\WeatherForecast\WeatherForecast.csproj" />
+    <ProjectReference Include="..\WeatherForecast\WeatherForecast.csproj" />
+    <ProjectReference Include="..\WeatherForecast\WeatherForecast.csproj" />
   </ItemGroup>
-
 </Project>

@@ -13,6 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00. Skapa infrastruktur", "00. Skapa infrastruktur", "{E835CD79-749C-4C16-AD69-6E0021059017}"
 	ProjectSection(SolutionItems) = preProject
 		AzureLogin.ps1 = AzureLogin.ps1
+		GetServicesPublicIp.ps1 = GetServicesPublicIp.ps1
 		SetupKeyVault.ps1 = SetupKeyVault.ps1
 		SetupKubernetes.ps1 = SetupKubernetes.ps1
 		SetupServiceBus.ps1 = SetupServiceBus.ps1
