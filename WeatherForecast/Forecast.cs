@@ -2,9 +2,9 @@ using System;
 
 namespace WeatherForecast
 {
-    public class WeatherForecast
+    public class Forecast
     {
-        public DateTime Date { get; set; }
+        public DateTimeOffset Date { get; set; }
 
         public int TemperatureC { get; set; }
 

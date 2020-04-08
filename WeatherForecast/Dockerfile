@@ -12,8 +12,11 @@ RUN dotnet restore "WeatherForecast/WeatherForecast.csproj"
 COPY . .
 WORKDIR "/src/WeatherForecast"
 RUN dotnet build "WeatherForecast.csproj" -c Release -o /app/build
+WORKDIR "/src/WeatherForecast.UnitTests"
+RUN dotnet vstest "WeatherForecast.UnitTests.csproj" -c Release -o /app/build --logger:"trx"
 
 FROM build AS publish
+WORKDIR "/src/WeatherForecast"
 RUN dotnet publish "WeatherForecast.csproj" -c Release -o /app/publish
 
 FROM base AS final
