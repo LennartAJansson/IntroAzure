@@ -38,7 +38,7 @@ namespace WeatherForecast.Controllers
     {
         private static readonly string[] Summaries = new[]
 {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching", "HotterThanHell"
         };
 
         //Production version of implementation, typically it will get real data from a real database
