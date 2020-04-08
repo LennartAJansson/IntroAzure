@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
+using WeatherForecast.Controllers;
+
 namespace WeatherForecast
 {
     public class Startup
@@ -19,6 +21,8 @@ namespace WeatherForecast
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IDatabase, Database>();
+
             services.AddControllers();
             services.AddSwaggerGen(options =>
                         options.SwaggerDoc("v1", new OpenApiInfo

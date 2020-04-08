@@ -72,9 +72,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04. Kubernetes", "04. Kuber
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherForecast", "WeatherForecast\WeatherForecast.csproj", "{9CC54A77-3590-4568-AA0B-501C5BEEB792}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherForecast.UnitTests", "WeatherForecast.UnitTests\WeatherForecast.UnitTests.csproj", "{1317B632-F7FF-4B12-AF69-FE9250F01429}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherForecast.UnitTests", "WeatherForecast.UnitTests\WeatherForecast.UnitTests.csproj", "{1317B632-F7FF-4B12-AF69-FE9250F01429}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherForecast.IntegrationTests", "..\WeatherForecast.IntegrationTests\WeatherForecast.IntegrationTests.csproj", "{F12F713D-BD23-4DDC-8A46-947E4A06613F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherForecast.IntegrationTests", "WeatherForecast.IntegrationTests\WeatherForecast.IntegrationTests.csproj", "{EBCD1381-5D1E-460C-9BA1-A124B8E3AF03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -138,10 +138,10 @@ Global
 		{1317B632-F7FF-4B12-AF69-FE9250F01429}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1317B632-F7FF-4B12-AF69-FE9250F01429}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1317B632-F7FF-4B12-AF69-FE9250F01429}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F12F713D-BD23-4DDC-8A46-947E4A06613F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F12F713D-BD23-4DDC-8A46-947E4A06613F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F12F713D-BD23-4DDC-8A46-947E4A06613F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F12F713D-BD23-4DDC-8A46-947E4A06613F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBCD1381-5D1E-460C-9BA1-A124B8E3AF03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBCD1381-5D1E-460C-9BA1-A124B8E3AF03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBCD1381-5D1E-460C-9BA1-A124B8E3AF03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBCD1381-5D1E-460C-9BA1-A124B8E3AF03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,7 +164,7 @@ Global
 		{F2C26FAD-EFBE-4806-9834-3F55DD4F4744} = {E835CD79-749C-4C16-AD69-6E0021059017}
 		{9CC54A77-3590-4568-AA0B-501C5BEEB792} = {26DA1DAB-6F12-446F-8B79-F3FEBFF91CAE}
 		{1317B632-F7FF-4B12-AF69-FE9250F01429} = {26DA1DAB-6F12-446F-8B79-F3FEBFF91CAE}
-		{F12F713D-BD23-4DDC-8A46-947E4A06613F} = {26DA1DAB-6F12-446F-8B79-F3FEBFF91CAE}
+		{EBCD1381-5D1E-460C-9BA1-A124B8E3AF03} = {26DA1DAB-6F12-446F-8B79-F3FEBFF91CAE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1A6B422-EE61-4822-8C9A-94022D85F09C}
