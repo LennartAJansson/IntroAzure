@@ -13,7 +13,7 @@ COPY . .
 WORKDIR "/src/WeatherForecast"
 RUN dotnet build "WeatherForecast.csproj" -c Release -o /app/build
 WORKDIR "/src/WeatherForecast.UnitTests"
-RUN dotnet test "WeatherForecast.UnitTests.csproj" -c Release -o /app/build --logger:"trx"
+RUN dotnet test "WeatherForecast.UnitTests.csproj" -c Release -o /app/build --results-directory /testresults --logger:"trx;LogFileName=test_results.trx" /p:CollectCoverage=true 
 
 FROM build AS publish
 WORKDIR "/src/WeatherForecast"
