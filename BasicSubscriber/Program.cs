@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace BasicSubscriber
 {
-    static class Program
+    internal class Program
     {
         private static void Main(string[] args) =>
             CreateHostBuilder(args)
@@ -12,11 +13,9 @@ namespace BasicSubscriber
                 .Run();
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host
-                .CreateDefaultBuilder(args)
+            Host.CreateDefaultBuilder(args)
 
-                .ConfigureAppConfiguration(config =>
-                    config.AddUserSecrets<ServiceBusSubscriberConfig>())
+                .ConfigureAppConfiguration(config => config.AddExtraConfiguration())
 
                 .ConfigureServices((hostContext, services) =>
                 {
