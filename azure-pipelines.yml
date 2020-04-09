@@ -45,7 +45,7 @@ stages:
         azureSubscription: 'Visual Studio Enterprise(4de1d502-8eea-407d-8c07-fd29a1f74686)'
         azureContainerRegistry: '{"loginServer":"lennartacr.azurecr.io", "id" : "/subscriptions/4de1d502-8eea-407d-8c07-fd29a1f74686/resourceGroups/LennartAKS/providers/Microsoft.ContainerRegistry/registries/LennartACR"}'
         dockerComposeFile: '**/docker-compose.yml'
-        additionalDockerComposeFiles: '**/docker-compose-override.yml'
+        additionalDockerComposeFiles: '**/docker-compose.override.yml'
         action: 'Run a specific service'
         serviceName: 'weatherforecast-tests'
         detached: false
