@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  weatherforecast:
+    image: ${DOCKER_REGISTRY-}weatherforecast
+    build:
+      context: .
+      dockerfile: WeatherForecast/Dockerfile
+  weatherforecast-tests:
+    image: ${DOCKER_REGISTRY-}weatherforecast-tests
+    build:
+      context: .
+      dockerfile: WeatherForecast/Dockerfile
+      target: test
