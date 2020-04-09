@@ -19,7 +19,7 @@ RUN dotnet test "WeatherForecast.UnitTests.csproj" /p:CollectCoverage=true
 
 FROM build AS publish
 WORKDIR "/src/WeatherForecast"
-RUN dotnet publish "WeatherForecast.csproj" --no-build -c Release -o /app/publish
+RUN dotnet publish "WeatherForecast.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
