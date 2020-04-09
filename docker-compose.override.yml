@@ -13,5 +13,6 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
    weatherforecast-tests:
     entrypoint:
-      - dotnet - test - --logger - trx;LogFileName=/tests/test-results.trx 
-    volumes: - ${BUILD_ARTIFACTSTAGINGDIRECTORY:-./tests/}:/tests
+      - "dotnet test --logger:trx;LogFileName=/tests/test-results.trx" 
+    volumes: 
+      - ${BUILD_ARTIFACTSTAGINGDIRECTORY}/tests:/tests
