@@ -15,7 +15,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-#    entrypoint:
-#      - "dotnet test --logger:trx;LogFileName=/tests/test-results.trx" 
+    entrypoint: "dotnet test --logger:trx;LogFileName=/tests/test-results.trx" 
     volumes: 
       - ${BUILD_ARTIFACTSTAGINGDIRECTORY}/tests:/tests
