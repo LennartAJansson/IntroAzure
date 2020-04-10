@@ -35,7 +35,7 @@ stages:
         containerregistrytype: 'Azure Container Registry'
         azureSubscription: 'Visual Studio Enterprise(4de1d502-8eea-407d-8c07-fd29a1f74686)'
         azureContainerRegistry: '{"loginServer":"lennartacr.azurecr.io", "id" : "/subscriptions/4de1d502-8eea-407d-8c07-fd29a1f74686/resourceGroups/LennartAKS/providers/Microsoft.ContainerRegistry/registries/LennartACR"}'
-        dockerComposeFile: '**/docker-compose.yml'
+        dockerComposeFile: '$(Build.SourcesDirectory)/docker-compose.yml'
         action: 'Build services'
         additionalImageTags: '$(Build.BuildId)'
         includeLatestTag: true
@@ -45,8 +45,8 @@ stages:
         containerregistrytype: 'Azure Container Registry'
         azureSubscription: 'Visual Studio Enterprise(4de1d502-8eea-407d-8c07-fd29a1f74686)'
         azureContainerRegistry: '{"loginServer":"lennartacr.azurecr.io", "id" : "/subscriptions/4de1d502-8eea-407d-8c07-fd29a1f74686/resourceGroups/LennartAKS/providers/Microsoft.ContainerRegistry/registries/LennartACR"}'
-        dockerComposeFile: '**/docker-compose.yml'
-        additionalDockerComposeFiles: '**/docker-compose.override.yml'
+        dockerComposeFile: '$(Build.SourcesDirectory)/docker-compose.yml'
+        additionalDockerComposeFiles: '$(Build.SourcesDirectory)/docker-compose.override.yml'
         action: 'Run a specific service'
         serviceName: 'weatherforecast-tests'
         detached: false
@@ -64,7 +64,7 @@ stages:
         containerregistrytype: 'Azure Container Registry'
         azureSubscription: 'Visual Studio Enterprise(4de1d502-8eea-407d-8c07-fd29a1f74686)'
         azureContainerRegistry: '{"loginServer":"lennartacr.azurecr.io", "id" : "/subscriptions/4de1d502-8eea-407d-8c07-fd29a1f74686/resourceGroups/LennartAKS/providers/Microsoft.ContainerRegistry/registries/LennartACR"}'
-        dockerComposeFile: '**/docker-compose.yml'
+        dockerComposeFile: '$(Build.SourcesDirectory)/docker-compose.yml'
         action: 'Push services'
         additionalImageTags: '$(Build.BuildId)'
         includeLatestTag: true
