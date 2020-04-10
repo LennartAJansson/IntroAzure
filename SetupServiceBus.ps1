@@ -12,7 +12,7 @@ New-Item -ItemType Directory -Force -Path "$ScriptDirectory\Logs"
 ##############################
 $resourceGroup = "LennartSBRG"
 $location = "northeurope"
-$keyvaultName = "LennartKV2"
+$keyvaultName = "LennartKV"
 
 $serviceBusName = "LennartServiceBus"
 $topicName = "nisse"
@@ -37,8 +37,6 @@ if (!($serviceBusNames -Contains $serviceBusName))
 	
 	Write-Output "Getting the connectionstring for the servicebus namespace"
 	$connectionString = $(az servicebus namespace authorization-rule keys list --resource-group $resourceGroup --namespace-name $serviceBusName --name RootManageSharedAccessKey --query primaryConnectionString --output tsv)
-	"{""ServiceBus"":{""ConnectionString"":""$connectionString""}}" | Out-File -FilePath ".\servicebus.json"
-	Write-Output "Your connectionstring for the servicebus namespace is stored in .\servicebus.json"
 
 	Write-Output "Creating Queue, Topic and Subscriber for the SDK examples in this solution"
 	$json = az servicebus queue create --name $queueName --namespace-name $serviceBusName --resource-group $resourceGroup --subscription $subscription
@@ -51,12 +49,22 @@ if (!($serviceBusNames -Contains $serviceBusName))
 	$json | Out-File -FilePath "$logPath\ServiceBus--ConnectionString.json"
 	$secret = $json | ConvertFrom-Json
 	Write-Output "Your connectionstring for the servicebus namespace is stored in the keyvault as ServiceBus--ConnectionString (ServiceBus:ConnectionString)"
+	
+	$json = az keyvault secret set --name "ServiceBus--Queue" --vault-name $keyvaultName --value $queueName
+	$json | Out-File -FilePath "$logPath\ServiceBus--Queue.json"
+	$json = az keyvault secret set --name "ServiceBus--Topic" --vault-name $keyvaultName --value $topicName
+	$json | Out-File -FilePath "$logPath\ServiceBus--Topic.json"
+	$json = az keyvault secret set --name "ServiceBus--Subscription" --vault-name $keyvaultName --value $subscriptionName
+	$json | Out-File -FilePath "$logPath\ServiceBus--Subscription.json"
 
 	Write-Output "Your connectionstring to the service bus is $connectionString"
 	Write-Output "It is stored in the keyvault and in .\servicebus.json"
 	Write-Output "Remember that if you are using ServiceBus SDK, you will have to create Queues, Topics and Subscribers on your own."
 	Write-Output "This script has created a queue named $queueName, a topic named $topicName and a topic subscription named $subscriptionName, these are the names used in the SDK examples"
 	Write-Output "When using MassTransit it will take care of creating queues, topics and subscriptions for you."
+
+	"{""ServiceBus"":{""ConnectionString"":""$connectionString"",""Queue"":""$queueName"",""Topic"":""$topicName"",""Subscription"":""$subscriptionName""}}" | Out-File -FilePath ".\servicebus.json"
+	Write-Output "Your connectionstring for the servicebus namespace is stored in .\servicebus.json"
 }
 else
 {

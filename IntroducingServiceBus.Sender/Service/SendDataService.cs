@@ -7,6 +7,7 @@ using IntroducingServiceBus.Sender.Abstract;
 
 using MassTransit;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -16,13 +17,13 @@ namespace IntroducingServiceBus.Sender.Service
     {
         private readonly ILogger<SendDataService> logger;
         private readonly IBus bus;
-        private readonly ServiceBusQueueConfig serviceBusQueueConfig;
+        private readonly ServiceBusSettings serviceBusSettings;
 
-        public SendDataService(ILogger<SendDataService> logger, IBus bus, IOptionsMonitor<ServiceBusQueueConfig> options)
+        public SendDataService(ILogger<SendDataService> logger, IBus bus, IOptionsMonitor<ServiceBusSettings> options)
         {
             this.logger = logger;
             this.bus = bus;
-            serviceBusQueueConfig = options.CurrentValue;
+            serviceBusSettings = options.CurrentValue;
             logger.LogInformation("SendDataProcess.SendDataProcess has been called");
         }
 
@@ -32,7 +33,7 @@ namespace IntroducingServiceBus.Sender.Service
 
             try
             {
-                IRequestClient<IRequestContractData, IResponseContractData> client = bus.CreateRequestClient<IRequestContractData, IResponseContractData>(new Uri($"{serviceBusQueueConfig.ConnectionString.ToUrl()}{serviceBusQueueConfig.QueueName}"), TimeSpan.FromSeconds(15));
+                IRequestClient<IRequestContractData, IResponseContractData> client = bus.CreateRequestClient<IRequestContractData, IResponseContractData>(new Uri($"{serviceBusSettings.Url}{serviceBusSettings.Queue}"), TimeSpan.FromSeconds(15));
 
                 var responseContractData = await client.Request(contractDataRequest);
 

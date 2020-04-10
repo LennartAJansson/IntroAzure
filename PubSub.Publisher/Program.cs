@@ -15,7 +15,7 @@ using Serilog;
 
 namespace PubSub.Publisher
 {
-    static class Program
+    internal class Program
     {
         private static void Main(string[] args) =>
             CreateHostBuilder(args)
@@ -25,17 +25,23 @@ namespace PubSub.Publisher
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
 
-                .ConfigureAppConfiguration(config =>
-                    config.AddUserSecrets<ServiceBusPublisherConfig>())
+                .ConfigureAppConfiguration(config => config.AddExtraConfiguration<Program>())
 
-                .UseSerilog((hostContext, config) =>
-                    config.ReadFrom.Configuration(hostContext.Configuration))
+                .UseSerilog((hostContext, config) => config.ReadFrom.Configuration(hostContext.Configuration))
 
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddOptions();
+
+                    services.Configure<KeyVaultSettings>(options => hostContext.Configuration.GetSection("KeyVault").Bind(options));
+
+                    services.Configure<ServiceBusSettings>(options => hostContext.Configuration.GetSection("ServiceBus").Bind(options));
+
+                    services.Configure<TimerSettings>(options => hostContext.Configuration.GetSection("TimerSettings").Bind(options));
+
                     #region MassTransit related
                     if (string.IsNullOrEmpty(hostContext.Configuration["ServiceBus:ConnectionString"]) ||
-                        string.IsNullOrEmpty(hostContext.Configuration["ServiceBus:TopicName"]))
+                        string.IsNullOrEmpty(hostContext.Configuration["ServiceBus:Topic"]))
                     {
                         throw new ArgumentException("You need to provide parameters for the service bus in your secrets file");
                     }
@@ -44,18 +50,11 @@ namespace PubSub.Publisher
                     {
                         var host = busFactoryConfig.Host(hostContext.Configuration["ServiceBus:ConnectionString"]);
 
-                        busFactoryConfig.Message<IRequestContractData>(topology =>
-                            topology.SetEntityName(hostContext.Configuration["ServiceBus:TopicName"]));
+                        busFactoryConfig.Message<IRequestContractData>(topology => topology.SetEntityName(hostContext.Configuration["ServiceBus:Topic"]));
                     });
 
-                    services.AddMassTransit(massTransit =>
-                        massTransit.AddBus(provider => azureServiceBus));
+                    services.AddMassTransit(massTransit => massTransit.AddBus(provider => azureServiceBus));
                     #endregion
-
-                    services.AddOptions();
-
-                    services.Configure<TimerSettings>(options =>
-                        hostContext.Configuration.GetSection("TimerSettings").Bind(options));
 
                     services.AddTransient<ISendDataService, SendDataService>();
 

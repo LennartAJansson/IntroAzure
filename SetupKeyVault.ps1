@@ -9,10 +9,10 @@ $scriptPath = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 ##############################
 # Setup Azure infrastructure #
 ##############################
-$resourceGroup = "LennartKVRG2"
+$resourceGroup = "LennartKVRG"
 $location = "northeurope"
 
-$keyvaultName = "LennartKV2"
+$keyvaultName = "LennartKV"
 $secretName = "AppSecret--MyAppSecret"
 $secretValue = "This is a secret from keyvault"
 $appName = "LennartKVApp"

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -15,19 +16,19 @@ namespace BasicQueueListener
         private IQueueClient queueClient;
 
         private readonly ILogger<Worker> logger;
-        private readonly ServiceBusQueueConfig serviceBusQueueConfig;
+        private readonly ServiceBusSettings serviceBusSettings;
 
-        public Worker(ILogger<Worker> logger, IOptions<ServiceBusQueueConfig> options)
+        public Worker(ILogger<Worker> logger, IOptions<ServiceBusSettings> options)
         {
             this.logger = logger;
-            serviceBusQueueConfig = options.Value;
+            serviceBusSettings = options.Value;
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
             await base.StartAsync(cancellationToken);
 
-            queueClient = new QueueClient(serviceBusQueueConfig.ConnectionString, serviceBusQueueConfig.QueueName);
+            queueClient = new QueueClient(serviceBusSettings.ConnectionString, serviceBusSettings.Queue);
 
             RegisterMessageHandler();
         }

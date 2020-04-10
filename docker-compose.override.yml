@@ -11,8 +11,11 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-   weatherforecast-tests:
-    entrypoint:
-      - "dotnet test --logger:trx;LogFileName=/tests/test-results.trx" 
+  weatherforecast-tests:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+#    entrypoint:
+#      - "dotnet test --logger:trx;LogFileName=/tests/test-results.trx" 
     volumes: 
       - ${BUILD_ARTIFACTSTAGINGDIRECTORY}/tests:/tests

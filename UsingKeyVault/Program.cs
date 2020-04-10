@@ -1,4 +1,3 @@
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,20 +20,19 @@ namespace UsingKeyVault
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
 
-                .ConfigureAppConfiguration(config => config.AddExtraConfiguration())
+                .ConfigureAppConfiguration(config => config.AddExtraConfiguration<Program>())
 
-                .UseSerilog((hostContext, config) =>
-                    config.ReadFrom.Configuration(hostContext.Configuration))
+                .UseSerilog((hostContext, config) => config.ReadFrom.Configuration(hostContext.Configuration))
 
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddOptions();
 
-                    services.Configure<AppSecret>(options =>
-                        hostContext.Configuration.GetSection("AppSecret").Bind(options));
+                    services.Configure<KeyVaultSettings>(options => hostContext.Configuration.GetSection("KeyVault").Bind(options));
 
-                    services.Configure<TimerSettings>(options =>
-                        hostContext.Configuration.GetSection("TimerSettings").Bind(options));
+                    services.Configure<AppSecret>(options => hostContext.Configuration.GetSection("AppSecret").Bind(options));
+
+                    services.Configure<TimerSettings>(options => hostContext.Configuration.GetSection("TimerSettings").Bind(options));
 
                     services.AddHostedService<Worker>();
                 });

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -15,19 +16,19 @@ namespace BasicSubscriber
         private ISubscriptionClient subscriptionClient;
 
         private readonly ILogger<Worker> logger;
-        private readonly ServiceBusSubscriberConfig serviceBusSubscriberConfig;
+        private readonly ServiceBusSettings serviceBusSettings;
 
-        public Worker(ILogger<Worker> logger, IOptions<ServiceBusSubscriberConfig> options)
+        public Worker(ILogger<Worker> logger, IOptions<ServiceBusSettings> options)
         {
             this.logger = logger;
-            serviceBusSubscriberConfig = options.Value;
+            serviceBusSettings = options.Value;
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
             await base.StartAsync(cancellationToken);
 
-            subscriptionClient = new SubscriptionClient(serviceBusSubscriberConfig.ConnectionString, serviceBusSubscriberConfig.TopicName, serviceBusSubscriberConfig.SubscriptionName);
+            subscriptionClient = new SubscriptionClient(serviceBusSettings.ConnectionString, serviceBusSettings.Topic, serviceBusSettings.Subscription);
 
             RegisterMessageHandler();
         }

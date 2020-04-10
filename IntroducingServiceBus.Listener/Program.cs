@@ -13,7 +13,7 @@ using Serilog;
 
 namespace IntroducingServiceBus.Listener
 {
-    static class Program
+    internal class Program
     {
         private static void Main(string[] args) =>
             CreateHostBuilder(args)
@@ -23,17 +23,21 @@ namespace IntroducingServiceBus.Listener
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
 
-                .ConfigureAppConfiguration(config =>
-                    config.AddUserSecrets<ServiceBusQueueConfig>())
+                .ConfigureAppConfiguration(config => config.AddExtraConfiguration<Program>())
 
-                .UseSerilog((hostContext, config) =>
-                    config.ReadFrom.Configuration(hostContext.Configuration))
+                .UseSerilog((hostContext, config) => config.ReadFrom.Configuration(hostContext.Configuration))
 
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddOptions();
+
+                    services.Configure<KeyVaultSettings>(options => hostContext.Configuration.GetSection("KeyVault").Bind(options));
+
+                    services.Configure<ServiceBusSettings>(options => hostContext.Configuration.GetSection("ServiceBus").Bind(options));
+
                     #region MassTransit related
                     if (string.IsNullOrEmpty(hostContext.Configuration["ServiceBus:ConnectionString"]) ||
-                        string.IsNullOrEmpty(hostContext.Configuration["ServiceBus:QueueName"]))
+                        string.IsNullOrEmpty(hostContext.Configuration["ServiceBus:Queue"]))
                     {
                         throw new ArgumentException("You need to provide parameters for the service bus in your secrets file");
                     }
@@ -57,8 +61,7 @@ namespace IntroducingServiceBus.Listener
             {
                 IServiceBusHost host = busFactoryConfig.Host(configuration["ServiceBus:ConnectionString"]);
 
-                busFactoryConfig.ReceiveEndpoint(configuration["ServiceBus:QueueName"], ep =>
-                    ep.ConfigureConsumer<RequestDataConsumer>(provider));
+                busFactoryConfig.ReceiveEndpoint(configuration["ServiceBus:Queue"], ep => ep.ConfigureConsumer<RequestDataConsumer>(provider));
             });
 
             return azureServiceBus;
