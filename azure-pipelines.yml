@@ -5,9 +5,6 @@
 trigger:
 - master
 
-pool:
-  name: DL-Test
-
 resources:
 - repo: self
 
@@ -29,7 +26,8 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: $(vmImageName)
+      name: DL-Test
+      #vmImage: $(vmImageName)
     steps:
 
     - task: DockerCompose@0
