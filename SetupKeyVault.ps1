@@ -5,6 +5,10 @@ $scriptPath = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 #KeyVault: https://docs.microsoft.com/sv-se/cli/azure/keyvault?view=azure-cli-latest
 
 "Active subscription $subscription"
+if($subscription -eq "")
+{
+    exit 1
+}
 
 ##############################
 # Setup Azure infrastructure #
