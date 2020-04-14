@@ -3,6 +3,10 @@ $ScriptDirectory = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 . ("$ScriptDirectory\AzureLogin.ps1")
 
 "Active subscription $subscription"
+if($subscription -eq "")
+{
+    exit 1
+}
 
 ##############################
 # Setup Azure infrastructure #

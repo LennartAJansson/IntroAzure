@@ -6,6 +6,10 @@ New-Item -ItemType Directory -Force -Path "$ScriptDirectory\Logs"
 #ServiceBus: https://docs.microsoft.com/sv-se/cli/azure/servicebus?view=azure-cli-latest
 
 "Active subscription $subscription"
+if($subscription -eq "")
+{
+    exit 1
+}
 
 ##############################
 # Setup Azure infrastructure #

@@ -14,9 +14,8 @@ namespace WeatherForecast.Controllers.Tests
     public class WeatherForecastControllerTests
     {
         [TestMethod()]
-        public void GetTest()
+        public async Task GetTest()
         {
-            //AAA
             //ARRANGE
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -33,7 +32,7 @@ namespace WeatherForecast.Controllers.Tests
 
             //ACT
             var wfc = serviceProvider.GetService<WeatherForecastController>();
-            var fc = wfc.Get();
+            var fc = await wfc.GetAsync();
 
             //ASSERT
             Assert.IsTrue(fc.Count() > 0);
@@ -44,7 +43,7 @@ namespace WeatherForecast.Controllers.Tests
 
     public class FakeDatabase : IDatabase
     {
-        public Task<IEnumerable<Forecast>> GetData()
+        public Task<IEnumerable<Forecast>> GetDataAsync()
         {
             var l = new List<Forecast>();
             var w = new Forecast { Date = DateTime.Now, Summary = "Unknown", TemperatureC = 10 };
