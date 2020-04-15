@@ -50,7 +50,7 @@ if (!($clusterNames -Contains $aksCluster))
 
 	Write-Output "Creating the cluster"
 	Write-Output "We are about to create the AKS Cluster. Once created (the creation could take ~10 min) we will continue..."
-	$json = az aks create --location $location --name $aksCluster --resource-group $resourceGroup --generate-ssh-keys --kubernetes-version $latestK8sVersion --service-principal $rbac.appId --client-secret $rbac.password --node-count 1
+	$json = az aks create --location $location --name $aksCluster --resource-group $resourceGroup --generate-ssh-keys --kubernetes-version $latestK8sVersion --service-principal $rbac.appId --client-secret $rbac.password --node-vm-size Standard_DS2_v2 --node-count 1
 	$json | Out-File -FilePath "$logPath\$aksCluster.json"
 	$cluster = $json | ConvertFrom-Json
 	Write-Output "Your properties for the cluster $aksCluster is stored in $aksCluster.json"

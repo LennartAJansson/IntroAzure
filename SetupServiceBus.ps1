@@ -8,7 +8,7 @@ New-Item -ItemType Directory -Force -Path "$ScriptDirectory\Logs"
 "Active subscription $subscription"
 if($subscription -eq "")
 {
-    exit 1
+	exit 1
 }
 
 ##############################
