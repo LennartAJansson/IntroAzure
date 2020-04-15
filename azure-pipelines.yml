@@ -30,60 +30,64 @@ stages:
       #vmImage: $(vmImageName)
     steps:
 
-    - task: DockerCompose@0
-      inputs:
-        containerregistrytype: 'Azure Container Registry'
-        azureSubscription: 'Visual Studio Enterprise(4de1d502-8eea-407d-8c07-fd29a1f74686)'
-        azureContainerRegistry: '{"loginServer":"lennartacr.azurecr.io", "id" : "/subscriptions/4de1d502-8eea-407d-8c07-fd29a1f74686/resourceGroups/LennartAKS/providers/Microsoft.ContainerRegistry/registries/LennartACR"}'
-        dockerComposeFile: '$(Build.SourcesDirectory)/docker-compose.yml'
-        action: 'Build services'
-        additionalImageTags: '$(Build.BuildId)'
-        includeLatestTag: true
-
-    - task: DockerCompose@0
-      inputs:
-        containerregistrytype: 'Azure Container Registry'
-        azureSubscription: 'Visual Studio Enterprise(4de1d502-8eea-407d-8c07-fd29a1f74686)'
-        azureContainerRegistry: '{"loginServer":"lennartacr.azurecr.io", "id" : "/subscriptions/4de1d502-8eea-407d-8c07-fd29a1f74686/resourceGroups/LennartAKS/providers/Microsoft.ContainerRegistry/registries/LennartACR"}'
-        dockerComposeFile: '$(Build.SourcesDirectory)/docker-compose.yml'
-        additionalDockerComposeFiles: '$(Build.SourcesDirectory)/docker-compose.override.yml'
-        action: 'Run a specific service'
-        serviceName: 'weatherforecast-tests'
-        detached: false
-
-    - task: PublishTestResults@2
-      inputs:
-        testResultsFormat: 'VSTest'
-        testResultsFiles: '**/*.trx'
-        searchFolder: '$(System.ArtifactStagingingDirectory)'
-        failTaskOnFailedTests: true
-        testRunTitle: 'IntroAzure - UnitTests Build: $(Build.BuildId)'
-
-    - task: DockerCompose@0
-      inputs:
-        containerregistrytype: 'Azure Container Registry'
-        azureSubscription: 'Visual Studio Enterprise(4de1d502-8eea-407d-8c07-fd29a1f74686)'
-        azureContainerRegistry: '{"loginServer":"lennartacr.azurecr.io", "id" : "/subscriptions/4de1d502-8eea-407d-8c07-fd29a1f74686/resourceGroups/LennartAKS/providers/Microsoft.ContainerRegistry/registries/LennartACR"}'
-        dockerComposeFile: '$(Build.SourcesDirectory)/docker-compose.yml'
-        action: 'Push services'
-        additionalImageTags: '$(Build.BuildId)'
-        includeLatestTag: true
-
-#    - task: DotNetCoreCLI@2
+#BEGIN: New way of executing unittests in container
+#    - task: DockerCompose@0
 #      inputs:
-#        command: 'test'
-#        projects: '**/*.UnitTests.csproj'
-#        arguments: '/p:CollectCoverage=true'
-#        testRunTitle: 'UnitTests - IntroAzure Build:$(Build.BuildId)'
-#    - task: Docker@2
-#      displayName: Build and push an image to container registry
+#        containerregistrytype: 'Azure Container Registry'
+#        azureSubscription: 'Visual Studio Enterprise(4de1d502-8eea-407d-8c07-fd29a1f74686)'
+#        azureContainerRegistry: '{"loginServer":"lennartacr.azurecr.io", "id" : "/subscriptions/4de1d502-8eea-407d-8c07-fd29a1f74686/resourceGroups/LennartAKS/providers/Microsoft.ContainerRegistry/registries/LennartACR"}'
+#        dockerComposeFile: '$(Build.SourcesDirectory)/docker-compose.yml'
+#        action: 'Build services'
+#        additionalImageTags: '$(Build.BuildId)'
+#        includeLatestTag: true
+
+#    - task: DockerCompose@0
 #      inputs:
-#        containerRegistry: '$(dockerRegistryServiceConnection)'
-#        repository: '$(imageRepository)'
-#        command: 'buildAndPush'
-#        Dockerfile: '$(dockerfilePath)Dockerfile'
-#        buildContext: '$(dockerfilePath)/..'
-#        tags: '$(tag)'
+#        containerregistrytype: 'Azure Container Registry'
+#        azureSubscription: 'Visual Studio Enterprise(4de1d502-8eea-407d-8c07-fd29a1f74686)'
+#        azureContainerRegistry: '{"loginServer":"lennartacr.azurecr.io", "id" : "/subscriptions/4de1d502-8eea-407d-8c07-fd29a1f74686/resourceGroups/LennartAKS/providers/Microsoft.ContainerRegistry/registries/LennartACR"}'
+#        dockerComposeFile: '$(Build.SourcesDirectory)/docker-compose.yml'
+#        additionalDockerComposeFiles: '$(Build.SourcesDirectory)/docker-compose.override.yml'
+#        action: 'Run a specific service'
+#        serviceName: 'weatherforecast-tests'
+#        detached: false
+
+#    - task: PublishTestResults@2
+#      inputs:
+#        testResultsFormat: 'VSTest'
+#        testResultsFiles: '**/*.trx'
+#        searchFolder: '$(System.ArtifactStagingingDirectory)'
+#        failTaskOnFailedTests: true
+#        testRunTitle: 'IntroAzure - UnitTests Build: $(Build.BuildId)'
+
+#    - task: DockerCompose@0
+#      inputs:
+#        containerregistrytype: 'Azure Container Registry'
+#        azureSubscription: 'Visual Studio Enterprise(4de1d502-8eea-407d-8c07-fd29a1f74686)'
+#        azureContainerRegistry: '{"loginServer":"lennartacr.azurecr.io", "id" : "/subscriptions/4de1d502-8eea-407d-8c07-fd29a1f74686/resourceGroups/LennartAKS/providers/Microsoft.ContainerRegistry/registries/LennartACR"}'
+#        dockerComposeFile: '$(Build.SourcesDirectory)/docker-compose.yml'
+#        action: 'Push services'
+#        additionalImageTags: '$(Build.BuildId)'
+#        includeLatestTag: true
+#END: New way of executing unittests in container
+
+#BEGIN: Working build, old way of unittest
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'test'
+        projects: '**/*.UnitTests.csproj'
+        arguments: '/p:CollectCoverage=true'
+        testRunTitle: 'UnitTests - IntroAzure Build:$(Build.BuildId)'
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'buildAndPush'
+        Dockerfile: '$(dockerfilePath)Dockerfile'
+        buildContext: '$(dockerfilePath)/..'
+        tags: '$(tag)'
+#END: Working build, old way of unittest
 
     - task: replacetokens@3
       inputs:
