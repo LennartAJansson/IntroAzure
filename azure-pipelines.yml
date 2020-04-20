@@ -10,7 +10,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '90f79f05-5e0b-4001-995e-b5b9174d2678'
+  dockerRegistryServiceConnection: 'ACR'
   imageRepository: 'weatherforecast'
   containerRegistry: 'lennartacr.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/WeatherForecast/'
