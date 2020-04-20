@@ -15,11 +15,11 @@ namespace Microsoft.Extensions.Configuration
             where TEntity : class
         {
             var keyvaultConfig = $"{Directory.GetCurrentDirectory()}\\..\\keyvault.json";
-            var servicebusConfig = $"{Directory.GetCurrentDirectory()}\\..\\servicebus.json";
+            //var servicebusConfig = $"{Directory.GetCurrentDirectory()}\\..\\servicebus.json";
 
             configuration.AddUserSecrets<TEntity>();
             configuration.AddJsonFile(keyvaultConfig, optional: true);
-            configuration.AddJsonFile(servicebusConfig, optional: true);
+            //configuration.AddJsonFile(servicebusConfig, optional: true);
 
             var builtConfig = configuration.Build();
 
@@ -41,7 +41,7 @@ namespace Microsoft.Extensions.Configuration
             if (!TestConfig(builtConfig, "ServiceBus:ConnectionString", "ServiceBus:Queue", "ServiceBus:Topic", "ServiceBus:Subscription"))
             {
                 Console.WriteLine($"Following information isn't neccessary an error:");
-                Console.WriteLine($"{servicebusConfig} not found, did you run the script SetupServiceBus.ps1?");
+                Console.WriteLine($"Servicebus settings not found, did you run the script SetupServiceBus.ps1?");
                 Console.WriteLine("If you are running the basic samples for using Azure Servicebus, they will not work!");
                 Console.WriteLine("If you already created your servicebus then make sure the servicebus config is included in user secrets, keyvault or servicebus.json!");
             }
