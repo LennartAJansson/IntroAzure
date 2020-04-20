@@ -5,7 +5,7 @@ $ScriptDirectory = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 "Active subscription $subscription"
 if($subscription -eq "")
 {
-    exit 1
+	exit 1
 }
 
 ##############################
@@ -42,7 +42,7 @@ if (!($clusterNames -Contains $aksCluster))
 	$json | Out-File -FilePath "$logPath\$servicePrincipal.json"
 	$rbac = $json | ConvertFrom-Json
 	Write-Output "Your properties for the RBAC $servicePrincipal is stored in $servicePrincipal.json. The script will pause now for 90 seconds to activate the RBAC."
-    Start-Sleep -s 90
+	Start-Sleep -s 90
 
 	Write-Output "Getting the latest version of AKS"
 	$latestK8sVersion = $(az aks get-versions -l $location --query 'orchestrators[-1].orchestratorVersion' -o tsv)
@@ -50,7 +50,7 @@ if (!($clusterNames -Contains $aksCluster))
 
 	Write-Output "Creating the cluster"
 	Write-Output "We are about to create the AKS Cluster. Once created (the creation could take ~10 min) we will continue..."
-	$json = az aks create --location $location --name $aksCluster --resource-group $resourceGroup --generate-ssh-keys --kubernetes-version $latestK8sVersion --service-principal $rbac.appId --client-secret $rbac.password --node-vm-size Standard_DS2_v2 --node-count 1
+	$json = az aks create --location $location --name $aksCluster --resource-group $resourceGroup --generate-ssh-keys --kubernetes-version $latestK8sVersion --service-principal $rbac.appId --client-secret $rbac.password #--node-vm-size Standard_D2as_v4 --node-count 1
 	$json | Out-File -FilePath "$logPath\$aksCluster.json"
 	$cluster = $json | ConvertFrom-Json
 	Write-Output "Your properties for the cluster $aksCluster is stored in $aksCluster.json"

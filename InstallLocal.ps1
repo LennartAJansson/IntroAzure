@@ -64,15 +64,6 @@ else
 	choco upgrade azure-cli -y
 }
 
-if($env:Path -notmatch "Azure\\CLI2")
-{
-	choco install azure-cli -y
-}
-else
-{
-	choco upgrade azure-cli -y
-}
-
 az --version
 kubectl version
 helm version
