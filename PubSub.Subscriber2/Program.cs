@@ -40,12 +40,6 @@ namespace PubSub.Subscriber2
                     services.Configure<ServiceBusSettings>(options => hostContext.Configuration.GetSection("ServiceBus").Bind(options));
 
                     #region MassTransit related
-                    if (string.IsNullOrEmpty(hostContext.Configuration["ServiceBus:ConnectionString"]) ||
-                        string.IsNullOrEmpty(hostContext.Configuration["ServiceBus:Topic"]))
-                    {
-                        throw new ArgumentException("You need to provide parameters for the service bus in your secrets file");
-                    }
-
                     services.AddMassTransit(massTransit =>
                     {
                         massTransit.AddConsumer<RequestDataConsumer>();

@@ -7,7 +7,7 @@ $scriptPath = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 "Active subscription $subscription"
 if($subscription -eq "")
 {
-    exit 1
+	exit 1
 }
 
 ##############################

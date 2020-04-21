@@ -40,25 +40,26 @@ namespace IntroducingServiceBus.Sender
                     services.Configure<TimerSettings>(options => hostContext.Configuration.GetSection("TimerSettings").Bind(options));
 
                     #region MassTransit related
-                    if (string.IsNullOrEmpty(hostContext.Configuration["ServiceBus:ConnectionString"]) ||
-                        string.IsNullOrEmpty(hostContext.Configuration["ServiceBus:Queue"]))
-                    {
-                        throw new ArgumentException("You need to provide parameters for the service bus in your secrets file");
-                    }
-
-                    var azureServiceBus = Bus.Factory.CreateUsingAzureServiceBus(busFactoryConfig =>
-                    {
-                        var host = busFactoryConfig.Host(hostContext.Configuration["ServiceBus:ConnectionString"]);
-
-                        busFactoryConfig.Message<IRequestContractData>(topology => topology.SetEntityName(hostContext.Configuration["ServiceBus:Queue"]));
-                    });
-
-                    services.AddMassTransit(massTransit => massTransit.AddBus(provider => azureServiceBus));
+                    services.AddMassTransit(massTransit => massTransit.AddBus(ConfigureBus));
                     #endregion
 
                     services.AddTransient<ISendDataService, SendDataService>();
 
                     services.AddHostedService<Worker>();
                 });
+
+        private static IBusControl ConfigureBus(IServiceProvider provider)
+        {
+            var configuration = provider.GetService<IConfiguration>();
+
+            var azureServiceBus = Bus.Factory.CreateUsingAzureServiceBus(busFactoryConfig =>
+            {
+                var host = busFactoryConfig.Host(configuration["ServiceBus:ConnectionString"]);
+
+                busFactoryConfig.Message<IRequestContractData>(topology => topology.SetEntityName(configuration["ServiceBus:Queue"]));
+            });
+
+            return azureServiceBus;
+        }
     }
 }
