@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WeatherForecast.IntegrationTests.Controllers
@@ -18,7 +17,7 @@ namespace WeatherForecast.IntegrationTests.Controllers
             using HttpClient client = new HttpClient();
 
             //ACT
-            var response = await client.GetAsync("http://40.127.242.168/weatherforecast");
+            var response = await client.GetAsync("http://52.142.121.210/weatherforecast");
             var json = await response.Content.ReadAsStringAsync();
             //IEnumerable<WeatherForecast> fc = JsonSerializer.Deserialize<IEnumerable<WeatherForecast>>(json);
             IEnumerable<Forecast> fc = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<Forecast>>(json);

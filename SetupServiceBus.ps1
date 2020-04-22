@@ -38,7 +38,6 @@ if (!($serviceBusNames -Contains $serviceBusName))
 	$servicebus = $json | ConvertFrom-Json
 	Write-Output "Your properties for the servicebus namespace is stored in $logPath\$serviceBusName.json"
 
-	
 	Write-Output "Getting the connectionstring for the servicebus namespace"
 	$connectionString = $(az servicebus namespace authorization-rule keys list --resource-group $resourceGroup --namespace-name $serviceBusName --name RootManageSharedAccessKey --query primaryConnectionString --output tsv)
 

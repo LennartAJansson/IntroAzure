@@ -15,7 +15,7 @@ spec:
         app: weatherforecast
     spec:
       containers:
-      - name: weatherforecast
+      - name: weatherforecast #+ GUID
         image: lennartacr.azurecr.io/weatherforecast:#{Build.BuildId}#
         imagePullPolicy: Always
         ports:

@@ -13,10 +13,11 @@ if($subscription -eq "")
 ##############################
 # Setup Azure infrastructure #
 ##############################
-$resourceGroup = "LennartEvtHubRG"
+$resourceGroup = "LennartEvtRG"
 $location = "northeurope"
 $keyvaultName = "LennartKV"
 
+$eventHubNamespaceName = "LennartEvtNS"
 $eventHubName = "LennartEvtHub"
 
 $eventHubNames = az eventhubs namespace list --query '[].name' --output tsv
@@ -28,45 +29,38 @@ if (!($eventHubNames -Contains $eventHubName))
 	$group = $json | ConvertFrom-Json
 	Write-Output "Your properties for the resourcegroup is stored in $logPath\$resourceGroup.json"
 
-	Write-Output "Creating a servicebus namespace"
-	$json = az servicebus namespace create --name $serviceBusName --resource-group $resourceGroup --location $location --sku Standard --subscription $subscription
-	$json | Out-File -FilePath "$logPath\$serviceBusName.json"
-	$servicebus = $json | ConvertFrom-Json
-	Write-Output "Your properties for the servicebus namespace is stored in $logPath\$serviceBusName.json"
+	Write-Output "Creating a eventhub namespace"
+	$json = az eventhubs namespace create --name $eventHubNamespaceName --resource-group $resourceGroup --location $location
+	$json | Out-File -FilePath "$logPath\$eventHubNamespaceName.json"
+	$eventhubnamespace = $json | ConvertFrom-Json
+	Write-Output "Your properties for the eventhub namespace is stored in $logPath\$eventHubNamespaceName.json"
 
-	
-	Write-Output "Getting the connectionstring for the servicebus namespace"
-	$connectionString = $(az servicebus namespace authorization-rule keys list --resource-group $resourceGroup --namespace-name $serviceBusName --name RootManageSharedAccessKey --query primaryConnectionString --output tsv)
+	$json = az eventhubs eventhub create --name $eventHubName --resource-group $resourceGroup --namespace-name $eventHubNamespaceName
+	$json | Out-File -FilePath "$logPath\$eventHubName.json"
+	$eventhub = $json | ConvertFrom-Json
+	Write-Output "Your properties for the eventhub is stored in $logPath\$eventHubName.json"
 
-	Write-Output "Creating Queue, Topic and Subscriber for the SDK examples in this solution"
-	$json = az servicebus queue create --name $queueName --namespace-name $serviceBusName --resource-group $resourceGroup --subscription $subscription
-	$json = az servicebus topic create --name $topicName --namespace-name $serviceBusName --resource-group $resourceGroup --subscription $subscription
-	$json = az servicebus topic subscription create --name $subscriptionName --topic-name $topicName --namespace-name $serviceBusName --resource-group $resourceGroup --subscription $subscription
-	Write-Output "Creating Queue, Topic and Subscriber for the SDK examples in this solution"
+	Write-Output "Getting the connectionstring for the eventhub namespace"
+	$connectionString = $(az eventhubs namespace authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventHubNamespaceName --name RootManageSharedAccessKey --query primaryConnectionString --output tsv)
 
 	Write-Output "Creating a secret in the keyvault for the connectionstring"
-	$json = az keyvault secret set --name "ServiceBus--ConnectionString" --vault-name $keyvaultName --value $connectionString
-	$json | Out-File -FilePath "$logPath\ServiceBus--ConnectionString.json"
+	$json = az keyvault secret set --name "EventHub--ConnectionString" --vault-name $keyvaultName --value $connectionString
+	$json | Out-File -FilePath "$logPath\EventHub--ConnectionString.json"
 	$secret = $json | ConvertFrom-Json
-	Write-Output "Your connectionstring for the servicebus namespace is stored in the keyvault as ServiceBus--ConnectionString (ServiceBus:ConnectionString)"
+	Write-Output "Your connectionstring for the eventhub namespace is stored in the keyvault as EventHub--ConnectionString (EventHub:ConnectionString)"
 	
-	$json = az keyvault secret set --name "ServiceBus--Queue" --vault-name $keyvaultName --value $queueName
-	$json | Out-File -FilePath "$logPath\ServiceBus--Queue.json"
-	$json = az keyvault secret set --name "ServiceBus--Topic" --vault-name $keyvaultName --value $topicName
-	$json | Out-File -FilePath "$logPath\ServiceBus--Topic.json"
-	$json = az keyvault secret set --name "ServiceBus--Subscription" --vault-name $keyvaultName --value $subscriptionName
-	$json | Out-File -FilePath "$logPath\ServiceBus--Subscription.json"
+	$json = az keyvault secret set --name "EventHub--Event" --vault-name $keyvaultName --value $eventHubName
+	$json | Out-File -FilePath "$logPath\EventHub--Event.json"
 
-	Write-Output "Your connectionstring to the service bus is $connectionString"
-	Write-Output "It is stored in the keyvault and in .\servicebus.json"
-	Write-Output "Remember that if you are using ServiceBus SDK, you will have to create Queues, Topics and Subscribers on your own."
-	Write-Output "This script has created a queue named $queueName, a topic named $topicName and a topic subscription named $subscriptionName, these are the names used in the SDK examples"
-	Write-Output "When using MassTransit it will take care of creating queues, topics and subscriptions for you."
+	Write-Output "Your connectionstring to the eventhub namespace is $connectionString"
+	Write-Output "It is stored in the keyvault and in .\eventhub.json"
+	Write-Output "Remember that if you are using EventHub SDK, you will have to create EventHubs on your own."
+	Write-Output "This script has created a eventhub named $eventHubName, this is the name used in the SDK examples"
 
-	"{""ServiceBus"":{""ConnectionString"":""$connectionString"",""Queue"":""$queueName"",""Topic"":""$topicName"",""Subscription"":""$subscriptionName""}}" | Out-File -FilePath ".\servicebus.json"
-	Write-Output "Your connectionstring for the servicebus namespace is stored in .\servicebus.json"
+	"{""EventHub"":{""ConnectionString"":""$connectionString"",""Event"":""$eventHubName""}}" | Out-File -FilePath ".\eventhub.json"
+	Write-Output "Your connectionstring for the eventhub namespace is stored in .\eventhub.json"
 }
 else
 {
-	Write-Output "ServiceBus namespace $serviceBusName already created"
+	Write-Output "EventHub namespace $eventHubName already created"
 }
