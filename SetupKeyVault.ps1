@@ -13,13 +13,13 @@ if($subscription -eq "")
 ##############################
 # Setup Azure infrastructure #
 ##############################
-$resourceGroup = "LennartKVRG"
+$resourceGroup = "$($Prefix)KVRG"
 $location = "northeurope"
 
-$keyvaultName = "LennartKV"
+$keyvaultName = "$($Prefix)KV"
 $secretName = "AppSecret--MyAppSecret"
 $secretValue = "This is a secret from keyvault"
-$appName = "LennartKVApp"
+$appName = "$($Prefix)KVApp"
 
 $keyVaultNames = az keyvault list --query '[].[name]' --output tsv
 if (!($keyVaultNames -Contains $KeyVaultName)) 

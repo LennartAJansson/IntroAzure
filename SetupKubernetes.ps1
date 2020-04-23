@@ -11,12 +11,12 @@ if($subscription -eq "")
 ##############################
 # Setup Azure infrastructure #
 ##############################
-$resourceGroup = "LennartAKS"
+$resourceGroup = "$($Prefix)AKS"
 $location = "northeurope"
 
-$acrName = "LennartACR"
-$aksCluster = "LennartCluster"
-$servicePrincipal = "LennartClusterSP"
+$acrName = "$($Prefix)ACR"
+$aksCluster = "$($Prefix)Cluster"
+$servicePrincipal = "$($Prefix)ClusterSP"
 
 
 $clusterNames = az aks list --query '[].[name]' --output tsv
@@ -46,7 +46,7 @@ if (!($clusterNames -Contains $aksCluster))
 
 	Write-Output "Getting the latest version of AKS"
 	$latestK8sVersion = $(az aks get-versions -l $location --query 'orchestrators[-1].orchestratorVersion' -o tsv)
-	$latestK8sVersion
+	$latestK8sVersion = "1.16.7"
 
 	Write-Output "Creating the cluster"
 	Write-Output "We are about to create the AKS Cluster. Once created (the creation could take ~10 min) we will continue..."

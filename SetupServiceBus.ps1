@@ -14,11 +14,11 @@ if($subscription -eq "")
 ##############################
 # Setup Azure infrastructure #
 ##############################
-$resourceGroup = "LennartSBRG"
+$resourceGroup = "$($Prefix)SBRG"
 $location = "northeurope"
-$keyvaultName = "LennartKV"
+$keyvaultName = "$($Prefix)KV"
 
-$serviceBusName = "LennartServiceBus"
+$serviceBusName = "$($Prefix)ServiceBus"
 $topicName = "nisse"
 $subscriptionName = "nisse1"
 $queueName = "kalle"

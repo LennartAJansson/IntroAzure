@@ -10,6 +10,7 @@ if($subscriptionExists -eq $false)
 $subscription = $env:SUBSCRIPTIONID
 $scriptPath = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 $logPath = "$scriptPath\Logs"
+$prefix = "Lennart"
 
 "Login to Azure using subscription"
 "For more information:"

@@ -13,14 +13,14 @@ if($subscription -eq "")
 ##############################
 # Setup Azure infrastructure #
 ##############################
-$resourceGroup = "LennartEvtRG"
+$resourceGroup = "$($Prefix)EvtRG"
 $location = "northeurope"
-$keyvaultName = "LennartKV"
+$keyvaultName = "$($Prefix)KV"
 
-$storageAccount = "LennartEvtStorage"
-$storageContainer = "LennartEvtContainer"
-$eventHubNamespaceName = "LennartEvtNS"
-$eventHubName = "LennartEvtHub"
+$storageAccount = "$($Prefix)EvtStorage"
+$storageContainer = "$($Prefix)EvtContainer"
+$eventHubNamespaceName = "$($Prefix)EvtNS"
+$eventHubName = "$($Prefix)EvtHub"
 
 $eventHubNames = az eventhubs namespace list --query '[].name' --output tsv
 if (!($eventHubNames -Contains $eventHubName)) 
