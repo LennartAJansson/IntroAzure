@@ -17,6 +17,8 @@ $resourceGroup = "LennartEvtRG"
 $location = "northeurope"
 $keyvaultName = "LennartKV"
 
+$storageAccount = "LennartEvtStorage"
+$storageContainer = "LennartEvtContainer"
 $eventHubNamespaceName = "LennartEvtNS"
 $eventHubName = "LennartEvtHub"
 
@@ -29,7 +31,18 @@ if (!($eventHubNames -Contains $eventHubName))
 	$group = $json | ConvertFrom-Json
 	Write-Output "Your properties for the resourcegroup is stored in $logPath\$resourceGroup.json"
 
-	Write-Output "Creating a eventhub namespace"
+	$json = az storage account create --name $storageAccount.ToLower() --resource-group $resourceGroup --location $location --sku Standard_LRS --kind StorageV2
+	$json | Out-File -FilePath "$logPath\$storageAccount.json"
+	$storage = $json | ConvertFrom-Json
+	Write-Output "Your properties for the storage account is stored in $logPath\$storageAccount.json"
+    $connectionStringBlob = az storage account show-connection-string --name $storageAccount.ToLower() --output tsv
+
+	$json = az storage container create --name $storageContainer.ToLower() --connection-string "$connectionStringBlob"
+	$json | Out-File -FilePath "$logPath\$storageContainer.json"
+	$container = $json | ConvertFrom-Json
+	Write-Output "Your properties for the resourcegroup is stored in $logPath\$storageContainer.json"
+
+    Write-Output "Creating a eventhub namespace"
 	$json = az eventhubs namespace create --name $eventHubNamespaceName --resource-group $resourceGroup --location $location
 	$json | Out-File -FilePath "$logPath\$eventHubNamespaceName.json"
 	$eventhubnamespace = $json | ConvertFrom-Json
@@ -41,23 +54,33 @@ if (!($eventHubNames -Contains $eventHubName))
 	Write-Output "Your properties for the eventhub is stored in $logPath\$eventHubName.json"
 
 	Write-Output "Getting the connectionstring for the eventhub namespace"
-	$connectionString = $(az eventhubs namespace authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventHubNamespaceName --name RootManageSharedAccessKey --query primaryConnectionString --output tsv)
+	$connectionStringEvt = $(az eventhubs namespace authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventHubNamespaceName --name RootManageSharedAccessKey --query primaryConnectionString --output tsv)
 
 	Write-Output "Creating a secret in the keyvault for the connectionstring"
-	$json = az keyvault secret set --name "EventHub--ConnectionString" --vault-name $keyvaultName --value $connectionString
-	$json | Out-File -FilePath "$logPath\EventHub--ConnectionString.json"
-	$secret = $json | ConvertFrom-Json
-	Write-Output "Your connectionstring for the eventhub namespace is stored in the keyvault as EventHub--ConnectionString (EventHub:ConnectionString)"
-	
-	$json = az keyvault secret set --name "EventHub--Event" --vault-name $keyvaultName --value $eventHubName
-	$json | Out-File -FilePath "$logPath\EventHub--Event.json"
 
-	Write-Output "Your connectionstring to the eventhub namespace is $connectionString"
+	$json = az keyvault secret set --name "EventHub--EventHubConnectionString" --vault-name $keyvaultName --value $connectionStringEvt
+	$json | Out-File -FilePath "$logPath\EventHub--EventHubConnectionString.json"
+	$secret = $json | ConvertFrom-Json
+	Write-Output "Your connectionstring for the eventhub namespace is stored in the keyvault as EventHub--EventHubConnectionString (EventHub:EventHubConnectionString)"
+	
+	$json = az keyvault secret set --name "EventHub--EventHubName" --vault-name $keyvaultName --value $eventHubName
+	$json | Out-File -FilePath "$logPath\EventHub--EventHubName.json"
+
+	$json = az keyvault secret set --name "EventHub--BlobConnectionString" --vault-name $keyvaultName --value $connectionStringBlob
+	$json | Out-File -FilePath "$logPath\EventHub--BlobConnectionString.json"
+
+	$json = az keyvault secret set --name "EventHub--BlobContainerName" --vault-name $keyvaultName --value $storageContainer
+	$json | Out-File -FilePath "$logPath\EventHub--BlobContainerName.json"
+
+	Write-Output "Your connectionstring to the eventhub namespace is $connectionStringEvt"
+	Write-Output "Your eventhub name is $eventHubName"
+	Write-Output "Your connectionstring to the blob storage is $connectionStringBlob"
+	Write-Output "Your blob container name is $storageContainer"
 	Write-Output "It is stored in the keyvault and in .\eventhub.json"
 	Write-Output "Remember that if you are using EventHub SDK, you will have to create EventHubs on your own."
 	Write-Output "This script has created a eventhub named $eventHubName, this is the name used in the SDK examples"
 
-	"{""EventHub"":{""ConnectionString"":""$connectionString"",""Event"":""$eventHubName""}}" | Out-File -FilePath ".\eventhub.json"
+	"{""EventHub"":{""EventHubConnectionString"":""$connectionStringEvt"",""EventHubName"":""$eventHubName"",""BlobConnectionString"":""$connectionStringBlob"",""BlobContainerName"":""$storageContainer""}}" | Out-File -FilePath ".\eventhub.json"
 	Write-Output "Your connectionstring for the eventhub namespace is stored in .\eventhub.json"
 }
 else

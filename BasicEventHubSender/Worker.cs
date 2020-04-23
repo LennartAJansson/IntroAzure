@@ -32,7 +32,7 @@ namespace BasicEventHubSender
             {
                 logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 // Create a producer client that you can use to send events to an event hub
-                await using (var producerClient = new EventHubProducerClient(eventHubSettings.ConnectionString, eventHubSettings.Event))
+                await using (var producerClient = new EventHubProducerClient(eventHubSettings.EventHubConnectionString, eventHubSettings.EventHubName))
                 {
                     // Create a batch of events 
                     using EventDataBatch eventBatch = await producerClient.CreateBatchAsync();

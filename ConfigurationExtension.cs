@@ -46,7 +46,7 @@ namespace Microsoft.Extensions.Configuration
                 Console.WriteLine("If you already created your servicebus then make sure the servicebus config is included in user secrets, keyvault or servicebus.json!");
             }
 
-            if (!TestConfig(builtConfig, "EventHub:ConnectionString", "EventHub:Event"))
+            if (!TestConfig(builtConfig, "EventHub:EventHubConnectionString", "EventHub:EventHubName", "EventHub:BlobConnectionString", "EventHub:BlobContainerName"))
             {
                 Console.WriteLine($"Following information isn't neccessary an error:");
                 Console.WriteLine($"Eventhub settings not found, did you run the script SetupEventHub.ps1?");
@@ -101,15 +101,17 @@ namespace Microsoft.Extensions.Configuration
 
     public class EventHubSettings
     {
-        public string ConnectionString { get; set; }
-        public string Event { get; set; }
+        public string EventHubConnectionString { get; set; }
+        public string EventHubName { get; set; }
+        public string BlobConnectionString { get; set; }
+        public string BlobContainerName { get; set; }
         public string Url
         {
             get
             {
-                if (ConnectionString.ToLower().Contains("endpoint=sb://"))
+                if (EventHubConnectionString.ToLower().Contains("endpoint=sb://"))
                 {
-                    string result = ConnectionString.Substring(ConnectionString.IndexOf('=') + 1);
+                    string result = EventHubConnectionString.Substring(EventHubConnectionString.IndexOf('=') + 1);
                     result = result.Substring(0, result.IndexOf(';'));
                     return result;
                 }

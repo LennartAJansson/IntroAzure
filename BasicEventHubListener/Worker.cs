@@ -3,8 +3,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Consumer;
 using Azure.Messaging.EventHubs.Processor;
+using Azure.Storage.Blobs;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -15,73 +17,70 @@ namespace BasicEventHubListener
 {
     public class Worker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<Worker> logger;
         private readonly EventHubSettings eventHubSettings;
 
-        //private BlobContainerClient storageClient;
-        //private EventProcessorClient processor;
-        private const string blobStorageConnectionString = "<AZURE STORAGE CONNECTION STRING>";
-        private const string blobContainerName = "<BLOB CONTAINER NAME>";
+        private BlobContainerClient storageClient;
+        private EventProcessorClient processor;
 
         public Worker(ILogger<Worker> logger, IOptions<EventHubSettings> options)
         {
-            _logger = logger;
+            this.logger = logger;
             this.eventHubSettings = options.Value;
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
+            await base.StartAsync(cancellationToken);
+
             // Read from the default consumer group: $Default
             string consumerGroup = EventHubConsumerClient.DefaultConsumerGroupName;
 
             // Create a blob container client that the event processor will use 
-            //storageClient = new BlobContainerClient(blobStorageConnectionString, blobContainerName);
+            storageClient = new BlobContainerClient(eventHubSettings.BlobConnectionString, eventHubSettings.BlobContainerName.ToLower());
 
             // Create an event processor client to process events in the event hub
-            //processor = new EventProcessorClient(storageClient, consumerGroup, eventHubSettings.ConnectionString, eventHubSettings.Event);
-
-            // Register handlers for processing events and handling errors
-            //processor.ProcessEventAsync += ProcessEventHandler;
-            //processor.ProcessErrorAsync += ProcessErrorHandler;
+            processor = new EventProcessorClient(storageClient, consumerGroup, eventHubSettings.EventHubConnectionString, eventHubSettings.EventHubName);
 
             // Start the processing
-            //await processor.StartProcessingAsync();
-
-            await base.StartAsync(cancellationToken);
+            processor.ProcessEventAsync += ProcessEventHandler;
+            processor.ProcessErrorAsync += ProcessErrorHandler;
+            await processor.StartProcessingAsync(cancellationToken);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-
-                // Wait for 10 seconds for the events to be processed
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                await Task.Delay(TimeSpan.FromSeconds(2));
             }
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken)
         {
             // Stop the processing
-            //await processor.StopProcessingAsync();
+            await processor.StopProcessingAsync(cancellationToken);
+            processor.ProcessEventAsync -= ProcessEventHandler;
+            processor.ProcessErrorAsync -= ProcessErrorHandler;
+
             await base.StopAsync(cancellationToken);
         }
 
-        static async Task ProcessEventHandler(ProcessEventArgs eventArgs)
+        private async Task ProcessEventHandler(ProcessEventArgs eventArgs)
         {
             // Write the body of the event to the console window
-            Console.WriteLine("\tRecevied event: {0}", Encoding.UTF8.GetString(eventArgs.Data.Body.ToArray()));
+            logger.LogInformation("Recevied event: {0}", Encoding.UTF8.GetString(eventArgs.Data.Body.ToArray()));
 
             // Update checkpoint in the blob storage so that the app receives only new events the next time it's run
             await eventArgs.UpdateCheckpointAsync(eventArgs.CancellationToken);
         }
 
-        static Task ProcessErrorHandler(ProcessErrorEventArgs eventArgs)
+        private Task ProcessErrorHandler(ProcessErrorEventArgs eventArgs)
         {
             // Write details about the error to the console window
-            Console.WriteLine($"\tPartition '{ eventArgs.PartitionId}': an unhandled exception was encountered. This was not expected to happen.");
-            Console.WriteLine(eventArgs.Exception.Message);
+            logger.LogError(eventArgs.Exception, $"Partition '{ eventArgs.PartitionId}': an unhandled exception was encountered. This was not expected to happen.");
+
             return Task.CompletedTask;
         }
     }
