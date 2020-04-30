@@ -14,6 +14,7 @@ namespace Microsoft.Extensions.Configuration
         internal static IConfigurationBuilder AddExtraConfiguration<TEntity>(this IConfigurationBuilder configuration)
             where TEntity : class
         {
+            var where = Directory.GetCurrentDirectory();
             var keyvaultConfig = $"{Directory.GetCurrentDirectory()}\\..\\keyvault.json";
             //var servicebusConfig = $"{Directory.GetCurrentDirectory()}\\..\\servicebus.json";
 

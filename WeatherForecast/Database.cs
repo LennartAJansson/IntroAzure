@@ -18,8 +18,8 @@ namespace WeatherForecast
             return Task.FromResult(Enumerable.Range(1, 1).Select(i => new Forecast
             {
                 Date = DateTimeOffset.Now,
-                TemperatureC = 10,
-                Summary = Summaries[5]
+                TemperatureC = 20,
+                Summary = Summaries[6]
             }));
         }
 

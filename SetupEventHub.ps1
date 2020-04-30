@@ -35,14 +35,14 @@ if (!($eventHubNames -Contains $eventHubName))
 	$json | Out-File -FilePath "$logPath\$storageAccount.json"
 	$storage = $json | ConvertFrom-Json
 	Write-Output "Your properties for the storage account is stored in $logPath\$storageAccount.json"
-    $connectionStringBlob = az storage account show-connection-string --name $storageAccount.ToLower() --output tsv
+	$connectionStringBlob = az storage account show-connection-string --name $storageAccount.ToLower() --output tsv
 
 	$json = az storage container create --name $storageContainer.ToLower() --connection-string "$connectionStringBlob"
 	$json | Out-File -FilePath "$logPath\$storageContainer.json"
 	$container = $json | ConvertFrom-Json
 	Write-Output "Your properties for the resourcegroup is stored in $logPath\$storageContainer.json"
 
-    Write-Output "Creating a eventhub namespace"
+	Write-Output "Creating a eventhub namespace"
 	$json = az eventhubs namespace create --name $eventHubNamespaceName --resource-group $resourceGroup --location $location
 	$json | Out-File -FilePath "$logPath\$eventHubNamespaceName.json"
 	$eventhubnamespace = $json | ConvertFrom-Json
