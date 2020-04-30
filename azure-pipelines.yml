@@ -26,8 +26,8 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      #name: DL-Test
-      vmImage: $(vmImageName)
+      name: DL-Test
+      #vmImage: $(vmImageName)
     steps:
 
 #BEGIN: New way of executing unittests in container
@@ -109,7 +109,7 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
-        projects: '**/*IntegrationTests.csproj'
+        projects: '**/*.IntegrationTests.csproj'
         arguments: '-o $(Build.ArtifactStagingDirectory)/IntegrationTests'
     - task: PublishPipelineArtifact@1
       inputs:
