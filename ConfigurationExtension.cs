@@ -16,10 +16,12 @@ namespace Microsoft.Extensions.Configuration
         {
             var where = Directory.GetCurrentDirectory();
             var keyvaultConfig = $"{Directory.GetCurrentDirectory()}\\..\\keyvault.json";
+
             //var servicebusConfig = $"{Directory.GetCurrentDirectory()}\\..\\servicebus.json";
 
-            configuration.AddUserSecrets<TEntity>();
+            //configuration.AddUserSecrets<TEntity>();
             configuration.AddJsonFile(keyvaultConfig, optional: true);
+
             //configuration.AddJsonFile(servicebusConfig, optional: true);
 
             var builtConfig = configuration.Build();
@@ -74,17 +76,24 @@ namespace Microsoft.Extensions.Configuration
     public class KeyVaultSettings
     {
         public string Name { get; set; }
+
         public string ClientId { get; set; }
+
         public string ClientSecret { get; set; }
+
         public string Url => $"https://{Name}.vault.azure.net/";
     }
 
     public class ServiceBusSettings
     {
         public string ConnectionString { get; set; }
+
         public string Queue { get; set; }
+
         public string Topic { get; set; }
+
         public string Subscription { get; set; }
+
         public string Url
         {
             get
@@ -103,9 +112,13 @@ namespace Microsoft.Extensions.Configuration
     public class EventHubSettings
     {
         public string EventHubConnectionString { get; set; }
+
         public string EventHubName { get; set; }
+
         public string BlobConnectionString { get; set; }
+
         public string BlobContainerName { get; set; }
+
         public string Url
         {
             get

@@ -1,15 +1,15 @@
-﻿using System.Threading.Tasks;
-
-using IntroducingServiceBus.Common.Abstract;
+﻿using IntroducingServiceBus.Common.Abstract;
 using IntroducingServiceBus.Common.Extension;
 
 using MassTransit;
 
 using Microsoft.Extensions.Logging;
 
+using System.Threading.Tasks;
+
 namespace IntroducingServiceBus.Listener.Service
 {
-    class RequestDataConsumer : IConsumer<IRequestContractData>
+    internal class RequestDataConsumer : IConsumer<IRequestContractData>
     {
         //https://masstransit-project.com/MassTransit/usage/request-response.html
         private readonly ILogger<RequestDataConsumer> logger;

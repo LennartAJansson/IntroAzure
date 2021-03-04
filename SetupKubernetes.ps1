@@ -46,11 +46,11 @@ if (!($clusterNames -Contains $aksCluster))
 
 	Write-Output "Getting the latest version of AKS"
 	$latestK8sVersion = $(az aks get-versions -l $location --query 'orchestrators[-1].orchestratorVersion' -o tsv)
-	$latestK8sVersion = "1.16.7"
+	$latestK8sVersion = "1.20.2"
 
 	Write-Output "Creating the cluster"
 	Write-Output "We are about to create the AKS Cluster. Once created (the creation could take ~10 min) we will continue..."
-	$json = az aks create --location $location --name $aksCluster --resource-group $resourceGroup --generate-ssh-keys --kubernetes-version $latestK8sVersion --service-principal $rbac.appId --client-secret $rbac.password #--node-vm-size Standard_D2as_v4 --node-count 1
+	$json = az aks create --location $location --name $aksCluster --resource-group $resourceGroup --generate-ssh-keys --kubernetes-version $latestK8sVersion --service-principal $rbac.appId --client-secret $rbac.password  --node-count 1 #--node-vm-size Standard_D2as_v4
 	$json | Out-File -FilePath "$logPath\$aksCluster.json"
 	$cluster = $json | ConvertFrom-Json
 	Write-Output "Your properties for the cluster $aksCluster is stored in $aksCluster.json"
